@@ -1,0 +1,23 @@
+{
+  "name": "trabajo3",
+  "version": "1.0.0",
+  "description": "Tp3 cloud computing",
+  "main": "index.js",
+  "dependencies": {
+    "aws-sdk": "^2.536.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nicolamber/CloudNode.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nicolamber/CloudNode/issues"
+  },
+  "homepage": "https://github.com/Nicolamber/CloudNode#readme"
+}
