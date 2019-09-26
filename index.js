@@ -31,10 +31,27 @@ const getEnvio = async id => {
         });
       });
     } catch (e) {
-      console.log("Error de envios pendientes: ", e);
+      console.log("Error al traer los envios: ", e);
     }
   };
 
+const getEnvioPendiente = async () => {
+    try{ 
+        var params = {
+            TableName: "envio",
+            IndexName: "envios_pendientes_index",
+            Limit: 30
+        };
+        return new Promise((resolve,reject) =>{
+            docClient.scan(params,(err,data)=>{
+                if(err) reject (err);
+                else resolve(data);
+            });
+        });
+    }catch(e){
+        console.log("Error al traer los envios pendientes: ", e);
+    }
+};
 
 };
 exports.handler = handler;
