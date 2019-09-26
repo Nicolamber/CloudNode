@@ -1,8 +1,8 @@
 var AWS = require('aws-sdk');
-var handler = function() {
+var handler = async (​ event​ ) => {
 var dynamodb = new AWS.DynamoDB({
 apiVersion: '2012-08-10',
-endpoint: 'http://localhost:8000'​ ,
+endpoint: 'http://​dynamodb​:8000',
 region: 'us-west-2',
 credentials: {
 accessKeyId: '2345',
@@ -13,6 +13,28 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 apiVersion: '2012-08-10',
 service: dynamodb
 });
-// codigo de la funcion
-}
-handler();​ // llamada para testing
+
+const getEnvio = async id => {
+    try {
+      var params = {
+        TableName: "envio",
+        
+        KeyConditionExpression: "id = :var", 
+        ExpressionAttributeValues: {
+          ":var": id
+        }
+      };
+      return new Promise((resolve, reject) => {
+        docClient.query(params, (err, data) => {
+          if (err) reject(err);
+          else resolve(data);
+        });
+      });
+    } catch (e) {
+      console.log("Error de envios pendientes: ", e);
+    }
+  };
+
+
+};
+exports.handler = handler;
