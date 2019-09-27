@@ -4,8 +4,9 @@ Trabajo practico 3 de la materia Cloud computing realizado por los alumnos:
  - Nahuel Valencia
 
 
+
 var params = {
-    TableName: 'envio',
+    TableName: 'envioLambVal',
     KeySchema: [
         {
             AttributeName: 'id',
@@ -66,23 +67,7 @@ var params = {
         destino:"Buenos Aires",
         email: "marcelom2455@gmail.com",
         pendiente:"x"
-    },
-    Item: {
-        id:"73",
-        fechaAlta:"2019-09-22",
-        destino:"Jujuy",
-        email: "richar1818@gmail.com",
-        pendiente:"x"
-    },
-    Item: {
-        id:"73",
-        fechaAlta:"2019-06-17",
-        destino:"Mendoza",
-        email: "jose_lepra18@gmail.com",
-        pendiente:"x"
     }
-
-
 };
 docClient.put(params, function(err, data) {
     if (err) ppJson(err); // an error occurred
