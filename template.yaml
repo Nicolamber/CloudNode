@@ -7,6 +7,7 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: nodejs8.10
+      Timeout: 60
       Events:
         NuevoEnvio:
           Type: Api

@@ -14,11 +14,11 @@ const docClient = new AWS.DynamoDB.DocumentClient({
   service: dynamodb
 });
 
-const getEnviosPendientes = async () => {
+const getPendientes = async () => {
   try {
     var params = {
-      TableName: "Envio",
-      IndexName: "idPendiente",
+      TableName: "envioLambVal",
+      IndexName: "envios_pendientes_index",
       Limit: 20
     };
     return new Promise((resolve, reject) => {
@@ -28,42 +28,40 @@ const getEnviosPendientes = async () => {
       });
     });
   } catch (e) {
-    console.log("TCL: getEnviosPendientes -> e", e);
+    console.log("Error al recuperar los envios pendientes: ", e);
   }
 };
 
-const createEnvio = async body => {
+const setEnvio = async body => {
   try {
     var params = {
-      TableName: "Envio",
+      TableName: "envioLambVal",
       Item: {
-        // a map of attribute name to AttributeValue
         id: Date.now().toString(),
         fechaAlta: new Date().toJSON(),
         destino: body.destino,
         email: body.email,
-        pendiente: "si"
+        pendiente: "x"
       }
     };
     return new Promise((resolve, reject) => {
       docClient.put(params, (err, data) => {
         if (err) reject(err);
-        else resolve("Se ha creado con exito!");
+        else resolve("Creacion exitosa");
       });
     });
   } catch (e) {
-    console.log("TCL: e", e);
+    console.log("Error de cracion en: ", e);
   }
 };
 
-const getEnvio = async id => {
+const getEnvioById = async id => {
   try {
     var params = {
-      TableName: "Envio",
-      //IndexName: 'id', // optional (if querying an index)
-      KeyConditionExpression: "id = :var", // a string representing a constraint on the attribute
+      TableName: "envioLambVal",
+     
+      KeyConditionExpression: "id = :var",
       ExpressionAttributeValues: {
-        // a map of substitutions for all attribute values
         ":var": id
       }
     };
@@ -74,15 +72,15 @@ const getEnvio = async id => {
       });
     });
   } catch (e) {
-    console.log("TCL: getEnviosPendientes -> e", e);
+    console.log("Error al recuperar los envios pendientes: ", e);
   }
 };
 
-const setEnvioEntregado = async id => {
+const setEnvioEntregadoById = async id => {
   const idParsed = id.toString()
   try {
     var params = {
-      TableName: "Envio",
+      TableName: "envioLambVal",
       Key: { id: idParsed },
       UpdateExpression: "remove pendiente"
     };
@@ -93,7 +91,7 @@ const setEnvioEntregado = async id => {
       });
     });
   } catch (e) {
-    console.log("TCL: getEnviosPendientes -> e", e);
+    console.log("Error en los envios pendientes causado por: ", e);
   }
 };
 
@@ -104,21 +102,21 @@ exports.handler = async event => {
 
     switch (event.resource) {
       case "/envios":
-        return { body: JSON.stringify(await createEnvio(body)) };
+        return { body: JSON.stringify(await setEnvio(body)) };
         break;
       case "/envios/pendientes":
-        return { body: JSON.stringify(await getEnviosPendientes()) };
+        return { body: JSON.stringify(await getPendientes()) };
       case "/envios/{id}":
-        return { body: JSON.stringify(await getEnvio(id)) };
+        return { body: JSON.stringify(await getEnvioById(id)) };
         break;
       case "/envios/{id}/entregado":
-        return { body: JSON.stringify(await setEnvioEntregado(id)) };
+        return { body: JSON.stringify(await setEnvioEntregadoById(id)) };
         break;
 
       default:
         break;
     }
   } catch (e) {
-    console.log("TCL: e", e);
+    console.log("Error: ", e);
   }
 };
