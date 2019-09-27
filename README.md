@@ -58,15 +58,16 @@ dynamodb.createTable(params, function(err, data) {
 });
 
 
-//ejemplo de valor insertado
+//ejemplo de uno de los valores insertados 
+
 var params = {
-    TableName: 'envio',
+    TableName: 'envioLambVal',
     Item: {
-        id:"29",
-        fechaAlta:"2019-08-31",
-        destino:"Buenos Aires",
-        email: "marcelom2455@gmail.com",
-        pendiente:"x"
+        id:"1",
+        fechaAlta:"2019-08-30",
+        destino:"Mendoza",
+        email: "mendozatesting@gmail.com",
+        pendiente:"pendiente"
     }
 };
 docClient.put(params, function(err, data) {
